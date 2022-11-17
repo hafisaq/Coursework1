@@ -33,10 +33,28 @@
                     {{cartItemCount}}
                     <span class="fas fa-cart-plus"></span>
                 </button>
+                <div>
+                    <input type="text" v-model="search" placeholder="Search"/>
+                    <i class="fa fa-search"></i>
+                </div>
+                <div>
+                    <select name="sort" id = " select" v-model = "sort">
+                        <option value="alphabetically">alphabetically</option>
+                        <option value="time">Price</option>
+
+                    </select>
+                    <button v-on:click = "ascending = !ascending">
+
+                        <i v-if = "ascending" class = "fa fa-sort-up"></i>
+                        <i v-else class = "fa fa-sort-down"></i>
+
+
+                    </button>
+                </div>
             </header>
             <main>
                 <div v-if="showproduct">
-                    <div v-for="product in sortedProducts">
+                    <div v-for="product in filteredProductsName">
                         <figure>
                             <img v-bind:src="product.image">
                         </figure>
@@ -163,6 +181,7 @@
                 data:{
                     sitename:"After School Activities",
                     products: products,
+                    search: "",
                     // {
                             // id:1,
                             // title:"Maths Tuition ",
@@ -254,7 +273,21 @@
                             return 0;
                         }
                         return productsArray.sort(compare);
-                    }
+                    }, 
+                    
+                    filteredProductsName() {
+
+                        return products.filter((products) => {
+                            
+                            return products.title.toLowerCase().match(this.search.toLowerCase())
+                        });
+
+                        
+
+                        
+                        
+                    },
+                  
                 },
                
             });

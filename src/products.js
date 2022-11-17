@@ -18,7 +18,7 @@ let products = [
         "image":"images/math.png",
         "availableInventory":10,
         "space":10,
-        "location": "Dubai",
+        "location": "RAK",
         "rating" : 4
     },
     {
