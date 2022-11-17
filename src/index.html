@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Groupwork</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+        <script src="https://cdn.jsdelivr.net/npm/vue@2.7.10/dist/vue.js" ></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    </head>
+    <style>
+        #app{
+            text-align: center;
+            background-color: #EEEEEE;
+            padding-bottom: 10px;
+            padding-top: 10px;
+            }
+    </style>
+    <body>
+        <!-- Mounting the app-->
+        <div id="app">
+            <header>
+                
+                <h1 v-text="sitename">
+                </h1>
+                <!-- Cart item count button-->
+                <!-- After every click from the addItem button, the value will increase by 1 (increments)-->
+                <button v-on:click="showCheckout">
+                    {{cartItemCount}}
+                    <span class="fas fa-cart-plus"></span>
+                </button>
+            </header>
+            <main>
+                <div v-if="showproduct">
+                    <figure>
+                        <img v-bind:src="product.image">
+                    </figure>
+                    <!-- Product details-->
+                    <!-- V-model : enables two way data-binding to form input elements -->
+                    <h2 v-text="product.title"></h2> <!-- updates elements text content with the data in Vuejs-->
+                    <p  v-html="product.description"></p> <!-- updates html elements text content, but it actually renders it, while v-text only treats it as a string -->
+                    <p>Price:{{product.price}}</p>
+                    <p>Location:{{product.location}}</p>
+                    <p>Left:{{product.space}}</p>
+                    <!-- Buttons -->
+                    <!-- Button when product.space is not 0 -->
+                    <button v-on:click="addItem" 
+                    v-if = "canAddToCart"> <!-- binds js snippets with vue js-->
+                            Add to Cart please
+                        <span class="fas fa-cart-plus" ></span>
+                    </button>
+                    <!-- Button when product.space is 0  (it becomes disabled) -->
+                    <button disabled="disabled" v-else>
+                        Add to Cart please
+                    <span class="fas fa-cart-plus" ></span>
+                </button>
+               </div>
+               <div v-else>
+                    <h2>checkout</h2>
+                    <p>
+                        <strong> First name </strong>
+                        <input v-model.trim = "order.firstName">
+                        <strong> Last name </strong>
+                        <input v-model.trim="order.lastName">
+                    </p>
+                    <p>
+                        <strong>State:</strong>
+                        <select v-model="state">
+
+
+                            <option disabled value="">State</option>
+                            <option v-for="(state,key) in state"
+                            v-bind:value="state">
+                            {{key}}
+
+                            </option>
+                            <!-- <option v-bind:value="states.dxb">DXB</option>
+                            <option v-bind:value="states.rak">RAK</option>
+                            <option v-bind:value="states.ajm">AJM</option>
+                            <option v-bind:value="states.fuj">FUJ</option> -->
+
+                        </select>
+
+                    </p>
+                    <p>
+                        <strong>Adress:</strong>
+                        <input v-model="order.address"/>
+                        <strong>City</strong>
+                        <input v-model="order.city"/>
+
+                    </p>
+
+                    <p>
+                        <strong>ZIP code:</strong>
+                        <input v-model.number="order.zip" type="number"/>
+                    </p>
+                    <p>
+                        <input v-model="order.gift" value="gift" id="gift" type="checkbox"
+                        v-bind:true-value="order.sendGift"
+                        v-bind:false-value="order.donotGift" />
+                        <label for="gift">Gift</label>
+
+                    </p>
+                    <p>
+                        <input v-model="order.method" value="home" id="home" type="radio">
+                        <label for="home">Home</label>
+                        <input v-model="order.method" value="business" id="business" type="radio">
+                        <label for="business">Business</label>
+                    </p>
+
+                    <h2>Order Information</h2>
+                    <p>First Name: {{order.firstName}}</p>
+                    <p>Last Name : {{order.lastName}}</p>
+                    <p>Zip {{order.zip}}</p>
+                    <p>state : {{order.state}}</p>
+                    <p>Adress: {{order.adress}}</p>
+                    <p>City: {{order.city}}</p>
+                    <p>Method:{{order.method}}</p>
+                    <p>Gift:{{order.gift}}</p>
+
+
+
+                    <button v-on:click="submittedForm">Place order</button>
+                    
+
+
+                   
+                </div>
+            </main>
+
+        </div>
+       
+        <script>
+            var webstore= new Vue({
+                // mounts the Vue application on a given DOM element.
+                el:'#app',
+                data:{
+                    sitename:"After School Activities",
+                    product:{
+                            id:1,
+                            title:"Maths Tuition ",
+                            description:"Math tuition after school hours to get improve the students skills",
+                            price:"AED 200",
+                            image:"images/math.png",
+                            availableInventory:5,
+                            space:5,
+                            location: "Dubai",
+                            },
+                    cart:[],
+                    
+                    showproduct:true,
+                    order:{
+                            firstname:'',
+                            lasname:'',
+                            city:'',
+                        
+                            zip:'',
+                            method:'home',
+                            sendGift:"Send as a gift",
+                            donotGift:"Do not send as a gift"
+
+                        },
+                    state:{
+                            dxb:"Dubai",
+                            rak:"Ras Al Khaima",
+                            ajm:"Ajman",
+                            fuj:"Fujaira",
+                        }
+                    
+
+                },
+                //Method is an object associated with the Vue instance. 
+                // Functions are defined inside the methods object
+                methods: {
+                    // addItem is called after the first button is clicked
+                    // method which decrements the product.space value after 
+                    //every click on the "Add to cart please" button
+                    addItem: function () {
+                        this.cart.push(this.product.id);
+                        console.log(this.cart)
+                        this.product.space=this.product.space-1; // decrementing the product.space
+                    },
+                    showCheckout(){
+                        this.showproduct=this.showproduct ? false:true;
+
+                    },
+                    submittedForm: function () {
+                        alert('order placed successfully')
+                    },
+                        
+                },
+                // computed properties enable you to create a property
+                // that can be used to modify, manipulate, and display
+                // data within your components in a readable and efficient manner.
+                computed:{
+                    cartItemCount: function () {
+                        // getting the size of cart array 
+                        return this.cart.length;
+
+                    },
+                    canAddToCart() {
+                        // checking if product.available inventory is greater than cartItemCount value 
+                        // from the cartItemCount computed property 
+                        return this.product.availableInventory > this.cartItemCount; 
+                    }
+                },
+            });
+        </script>
+    </body>
+</html>
+
+<!-- 
+    Git is a distributed version control system
+    Git stages :
+    1. Modified
+    2. Staged 
+    3. Commit
+    Git sections : 
+    1. Working tree
+    2. Staging Area
+    3. Git directory 
+-->
