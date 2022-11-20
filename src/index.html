@@ -41,6 +41,7 @@
                     <select name="sortby" id = "select" v-model = "sortby">
                         <option value="alphabetically">alphabetically</option>
                         <option value="price">Price</option>
+                        <option value="slots">Slots </option>
 
                     </select>
                     <button v-on:click = "ascending = !ascending" class = "sort-button">
@@ -279,9 +280,17 @@
                     
                     filteredProductsName() {
                         
-                     
+                       
+                     if(this.search != '' && this.search){
+                            let productsArray = this.products;
+                            productsArray = productsArray.filter((item)=>{
+                                return item.title.toUpperCase().includes(this.search.toUpperCase())
+                            })
+                            return productsArray
+                        }
+                            
 
-                     if(this.sortby =="price")
+                     else if(this.sortby =="price")
                         {
                             if(!this.ascending){
                             let productsArray = this.products.slice(0);
@@ -337,7 +346,36 @@
                             return productsArray.sort(compare);
                             }
 
-                        }
+                        }else if (this.sortby == 'slots')
+                            {
+                                if(!this.ascending){
+                            let productsArray = this.products.slice(0);
+                            function compare(a,b){
+                                if(a.space > b.space){
+                                    return 1;
+                                }
+                                if(a.space < b.space){
+                                    return -1;
+                                }
+                                return 0;
+                            }
+                            return productsArray.sort(compare).reverse();
+                            }else{
+                                let productsArray = this.products.slice(0);
+                            function compare(a,b){
+                                if(a.space > b.space){
+                                    return 1;
+                                }
+                                if(a.space < b.space){
+                                    return -1;
+                                }
+                                return 0;
+                            }
+                            return productsArray.sort(compare);
+                            }
+                        } 
+
+                        
 
 
                            
