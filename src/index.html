@@ -42,7 +42,7 @@
         <!-- Cart item count button-->
         <!-- After every click from the addItem button, the value will increase by 1 (increments)-->
         <button v-on:click="showCheckout" v-if = "cartItemCount">
-          {{cartItemCount}}
+          {{cartItemCount/2}}
           <span class="fas fa-cart-plus" ></span>
          
         </button>
@@ -206,17 +206,6 @@
           sitename: "After School Activities",
           products: products,
           search: "",
-          // {
-          // id:1,
-          // title:"Maths Tuition ",
-          // description:"Math tuition after school hours to get improve the students skills",
-          // price:"AED 200",
-          // image:"images/math.png",
-          // availableInventory:10,
-          // space:10,
-          // location: "Dubai",
-          // rating : 3
-          // },
           cart: [],
 
           showproduct: true,
@@ -249,9 +238,9 @@
             //     id:product.id,title: product.title, 
             //     price: product.price, description: product.description, image: product.image
             // })
-            this.cart.push({id:product.id,
+            this.cart.push({
                 title: product.title,price: product.price,description: product.description,image:product.image
-            });
+            }) && this.cart.push(product.id);
 
                 
                 
