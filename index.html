@@ -67,7 +67,7 @@
             </div>
           <div v-for="product in filteredProductsName">
             <figure>
-              <img v-bind:src="product.image" />
+              <img v-bind:src="product.image" style="height: 80px;" />
             </figure>
             <!-- Product details-->
             <!-- V-model : enables two way data-binding to form input elements -->
@@ -109,10 +109,9 @@
           <!-- user information input  -->
           <h2>checkout</h2>
           <p>
-            <strong> First name </strong>
-            <input v-model.trim="order.firstName" type = "text" />
-            <strong> Last name </strong>
-            <input v-model.trim="order.lastName" />
+            <strong> Name </strong>
+            <input v-model.trim="order.Name" type = "text" @keyup="namevalidation" />
+         
             <strong>Phone Number</strong>
             <input v-model.trim = "order.phoneNumber " name = "phonenumber" @keyup="phoneValidation"/>
           </p>
@@ -158,12 +157,13 @@
              
                 <div v-for="i in this.cart" id="cart">
                  
+                  <figure>
+                    <img v-bind:src="i.image"  style="height:50px"/>
+                  </figure>
                  <p>{{i.title}}</p>
                  <p>{{i.description}}</p>
                  <p>{{i.price}}</p>
-                 <figure>
-                    <img v-bind:src="i.image" />
-                  </figure>
+                 
                   
                   <button v-on:click = "cartremove(i.id,i.title)">Delete</button>
                  
@@ -177,8 +177,8 @@
               <!-- user information is displayed  -->
 
               <h2>Order Information</h2>
-              <p>First Name: {{order.firstName}}</p>
-              <p>Last Name : {{order.lastName}}</p>
+              <p>First Name: {{order.Name}}</p>
+
               <p>Phone Number:{{order.phoneNumber}}</p>
               <p>Zip {{order.zip}}</p>
               <p>Adress: {{order.address}}</p>
@@ -216,8 +216,8 @@
 
           showproduct: true,
           order: {
-            firstname: "",
-            lasname: "",
+            Name: "",
+           
             city: "",
 
             zip: "",
@@ -297,7 +297,7 @@
 
           namevalidation(){
             const regex = /^[a-z ,.'-]+$/i;
-            if (this.order.firstName.match(regex) && this.order.lastName.match(regex))
+            if (this.order.Name.match(regex) )
             {
               return this.isvalidname = true;
             }else{
@@ -350,28 +350,13 @@
 
           filteredProductsName() {
 
-            if(this.search  )
-            {
-              this.products.forEach((element)=>{
-                let titleproduct = element.title.toLowerCase();
-                let locationproduct = element.location.toLowerCase();
-                if(this.search || this.search != "")
-                {
-                  element.show = true;
-                }
-               
-                  else{let searchproduct = this.search.toLowerCase();
-                  if(searchproduct[i]===titleproduct[i]||searchproduct[i]===locationproduct[i])
-                    element.show = true;
-                  else 
-                    {
-                      element.show = false;
-                      
-                    }
-                  
-                }
-              });
-            }
+            if(this.search != '' && this.search){
+                             let productsArray = this.products;
+                             productsArray = productsArray.filter((item)=>{
+                                 return item.title.toUpperCase().includes(this.search.toUpperCase())
+                             })
+                             return productsArray
+                         }
 
             else if (this.sortby == "price") {
               // sorts the products by price , location , and the space left
