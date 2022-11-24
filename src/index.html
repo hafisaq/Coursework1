@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>Groupwork</title>
+    <title>After School Activities</title>
     <meta name="description" content="" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="" />
@@ -13,9 +13,7 @@
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
-      integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
+      
     />
   </head>
   <style>
@@ -42,7 +40,7 @@
         <!-- Cart item count button-->
         <!-- After every click from the addItem button, the value will increase by 1 (increments)-->
         <button v-on:click="showCheckout" v-if = "cartItemCount">
-          {{cartItemCount/2}}
+          {{cartItemCount}}
           <span class="fas fa-cart-plus" ></span>
          
         </button>
@@ -53,8 +51,8 @@
        
         <div v-if="showproduct" id="showproduct">
             <div>
-                <input type="text" v-model="search" placeholder="Search" />
-                <i class="fa fa-search"></i>
+                <input type="text" v-model="search"  placeholder="Search" />
+                <i class="fa fa-search" ></i>
               </div>
               <div>
                 <select name="sortby" id="select" v-model="sortby">
@@ -173,10 +171,12 @@
                     <img v-bind:src="i.image" />
                   </figure>
                   
-                  <!-- <button v-on:click = "deleteitem(i.id,i.title)">Delete</button> -->
+                  <button v-on:click = "deleteitem(i.id,i.title)">Delete</button>
                  
 
                 </div>
+
+              
      
             </div>
           
@@ -185,7 +185,7 @@
             <p>Last Name : {{order.lastName}}</p>
             <p>Zip {{order.zip}}</p>
             <p>state : {{order.state}}</p>
-            <p>Adress: {{order.adress}}</p>
+            <p>Adress: {{order.address}}</p>
             <p>City: {{order.city}}</p>
             <p>Method:{{order.method}}</p>
             <p>Gift:{{order.gift}}</p>
@@ -207,6 +207,7 @@
           products: products,
           search: "",
           cart: [],
+          cartitem:[],
 
           showproduct: true,
           order: {
@@ -240,7 +241,13 @@
             // })
             this.cart.push({
                 title: product.title,price: product.price,description: product.description,image:product.image
-            }) && this.cart.push(product.id);
+            }),
+
+            this.cartitem.push(product.id)
+
+            // product.space = product.space - 1;
+            // this.cart.pop();
+
 
                 
                 
@@ -249,7 +256,8 @@
             // this.cart.push(product.id)
             // this.cart.push(product)
          
-            product.space = product.space - 1; // decrementing the product.space
+            product.space = product.space - 1;
+            product.availableInventory = product.availableInventory - 1; // decrementing the product.space
           },
           showCheckout() {  
             this.showproduct = this.showproduct ? false : true;
@@ -278,10 +286,12 @@
             }
             return count;
           },
-            //   deleteitem(id,title){
-            //     this.cart.splice(this.cart.indexOf(id),1);
-            //     product[product.indexOf(product.find(o=>o.title === title))].space-=1
-            //   }
+
+       
+
+
+          
+
          
         },
         // computed properties enable you to create a property
@@ -290,7 +300,7 @@
         computed: {
           cartItemCount: function () {
             // getting the size of cart array
-            return this.cart.length;
+            return this.cartitem.length;
           },
           sortedProducts() {
             let productsArray = this.products.slice(0);
@@ -304,25 +314,31 @@
           },
 
           filteredProductsName() {
-            if (this.search != "" && this.search) {
-              let productsArray = this.products;
-              productsArray = productsArray.filter((item) => {
-                return item.title
-                  .toUpperCase()
-                  .includes(this.search.toUpperCase());
+
+            if(this.search  )
+            {
+              this.products.forEach((element)=>{
+                let titleproduct = element.title.toLowerCase();
+                let locationproduct = element.location.toLowerCase();
+                if(this.search || this.search != "")
+                {
+                  element.show = true;
+                }
+               
+                  else{let searchproduct = this.search.toLowerCase();
+                  if(searchproduct[i]===titleproduct[i]||searchproduct[i]===locationproduct[i])
+                    element.show = true;
+                  else 
+                    {
+                      element.show = false;
+                      
+                    }
+                  
+                }
               });
-              return productsArray;
-            } else if (this.search != "" && this.search) {
-              let productsArra = this.products;
-              productsArra = productsArra.filter((item) => {
-                return item.location
-                  .toUpperCase()
-                  .includes(this.search.toUpperCase());
-              });
-              return productsArra;
             }
 
-            if (this.sortby == "price") {
+            else if (this.sortby == "price") {
               if (!this.ascending) {
                 let productsArray = this.products.slice(0);
 
@@ -403,6 +419,7 @@
               }
             }
           },
+         
         },
       });
     </script>
