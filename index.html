@@ -353,7 +353,8 @@
             if(this.search != '' && this.search){
                              let productsArray = this.products;
                              productsArray = productsArray.filter((item)=>{
-                                 return item.title.toUpperCase().includes(this.search.toUpperCase())
+                                 return item.title.toUpperCase().includes(this.search.toUpperCase()) || item.location.toUpperCase().includes(this.search.toUpperCase())
+                                 ;
                              })
                              return productsArray
                          }
