@@ -100,7 +100,7 @@
                 All out
               </span>
               <span
-                v-else-if="product.availableInventory - cartCount(product.id) < 5 "
+                v-else-if="product.availableInventory - cartCount(product.id) <= 5 "
               >
                 Only {{product.availableInventory-cartCount(product.id)}} left
               </span>
@@ -245,9 +245,6 @@
             // shows the checkout
             this.showproduct = this.showproduct ? false : true;
           },
-          showLessons(){
-            this.showLessons = this.showLessons ? false :true ; 
-          },
           submittedForm: function () {
             alert("order placed successfully"), window.location.reload();
           },
@@ -271,6 +268,11 @@
             products[
               products.indexOf(products.find((o) => o.title === title))
             ].space += 1;
+
+            if(this.cart.length === 0 )
+            {
+              this.showproduct = true;
+            }
           },
           cartCount(id) {
             // checks the number of products in the cart
