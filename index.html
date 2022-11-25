@@ -36,13 +36,11 @@
         <h1 v-text="sitename"></h1>
         <!-- Cart item count button-->
         <!-- After every click from the addItem button, the value will increase by 1 (increments)-->
-        <button  v-if="cartItemCount">
+        <button  v-if="cartItemCount" v-on:click = "showCheckout">
           {{cartItemCount}}
           <span class="fas fa-cart-plus"></span>
         </button>
-        <button  v-on:click = "showCheckout()">
-          show 
-        </button>
+      
       </header>
       <main>
         <div v-if="showproduct" id="showproduct">
@@ -113,6 +111,7 @@
         <div v-else>
           <!-- user information input  -->
           <h2>checkout</h2>
+         
           <p>
             <strong> Name </strong>
             <input
@@ -245,6 +244,9 @@
           showCheckout() {
             // shows the checkout
             this.showproduct = this.showproduct ? false : true;
+          },
+          showLessons(){
+            this.showLessons = this.showLessons ? false :true ; 
           },
           submittedForm: function () {
             alert("order placed successfully"), window.location.reload();
